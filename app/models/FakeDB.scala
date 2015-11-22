@@ -14,7 +14,8 @@ object FakeDB {
   // API KEYS
   val apiKeys = FakeTable(
     1L -> ApiKey(apiKey = "AbCdEfGhIjK1", name = "ios-app", active = true),
-    2L -> ApiKey(apiKey = "AbCdEfGhIjK2", name = "android-app", active = true)
+    2L -> ApiKey(apiKey = "AbCdEfGhIjK2", name = "android-app", active = true),
+    3L -> ApiKey(apiKey = "AbCdEfGhIjK3", name = "web-app", active = true)
   )
 
   // TOKENS

@@ -46,3 +46,5 @@ GET			/assets/*file				controllers.Assets.versioned(path="/public", file: Asset)
 # SHOW FAKE DB DATA
 # Auxiliar to check the FakeDB information. It's only for testing purpose. You should remove it.
 GET			/fakeDB							controllers.Application.fakeDB
+POST        /fakeUpload                     controllers.Application.upload
+POST        /fakeUpload2                    controllers.Application.upload2
