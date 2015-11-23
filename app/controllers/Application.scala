@@ -23,9 +23,9 @@ class Application @Inject() (val messagesApi: MessagesApi) extends api.ApiContro
     Ok("File uploaded")
   }
 
-  def upload2 = Action(parse.file(to = new java.io.File("toturial/"))) { request =>
+  /*def upload2 = Action(parse.file(to = new java.io.File("toturial/"))) { request =>
     println(request.body.getAbsolutePath)
     Ok("File uploaded" + request.body.getName)
-  }
+  }*/
 
 }
