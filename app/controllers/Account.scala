@@ -2,7 +2,7 @@ package controllers
 
 import api.ApiError._
 import api.JsonCombinators._
-import models.{ User, ApiToken }
+import models.{ TestUser, TestUser$, ApiToken }
 import play.api.mvc._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -14,12 +14,12 @@ import play.api.libs.functional.syntax._
 class Account @Inject() (val messagesApi: MessagesApi) extends api.ApiController {
 
   def info = SecuredApiAction { implicit request =>
-    maybeItem(User.findById(request.userId))
+    maybeItem(TestUser.findById(request.userId))
   }
 
   def update = SecuredApiActionWithBody { implicit request =>
-    readFromRequest[User] { user =>
-      User.update(request.userId, user.name).flatMap { isOk =>
+    readFromRequest[TestUser] { user =>
+      TestUser.update(request.userId, user.name).flatMap { isOk =>
         if (isOk) noContent() else errorInternal
       }
     }
@@ -33,10 +33,10 @@ class Account @Inject() (val messagesApi: MessagesApi) extends api.ApiController
   def updatePassword = SecuredApiActionWithBody { implicit request =>
     readFromRequest[Tuple2[String, String]] {
       case (oldPwd, newPwd) =>
-        User.findById(request.userId).flatMap {
+        TestUser.findById(request.userId).flatMap {
           case None => errorUserNotFound
           case Some(user) if (oldPwd != user.password) => errorCustom("api.error.reset.pwd.old.incorrect")
-          case Some(user) => User.updatePassword(request.userId, newPwd).flatMap { isOk =>
+          case Some(user) => TestUser.updatePassword(request.userId, newPwd).flatMap { isOk =>
             if (isOk) noContent() else errorInternal
           }
         }
@@ -45,7 +45,7 @@ class Account @Inject() (val messagesApi: MessagesApi) extends api.ApiController
 
   def delete = SecuredApiAction { implicit request =>
     ApiToken.delete(request.token).flatMap { _ =>
-      User.delete(request.userId).flatMap { _ =>
+      TestUser.delete(request.userId).flatMap { _ =>
         noContent()
       }
     }

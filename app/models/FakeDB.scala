@@ -13,9 +13,9 @@ object FakeDB {
 
   // API KEYS
   val apiKeys = FakeTable(
-    1L -> ApiKey(apiKey = "AbCdEfGhIjK1", name = "ios-app", active = true),
-    2L -> ApiKey(apiKey = "AbCdEfGhIjK2", name = "android-app", active = true),
-    3L -> ApiKey(apiKey = "AbCdEfGhIjK3", name = "web-app", active = true)
+    1L -> ApiKey(apiKey = "iso-app", name = "ios-app", active = true),
+    2L -> ApiKey(apiKey = "android-app", name = "android-app", active = true),
+    3L -> ApiKey(apiKey = "web-app", name = "web-app", active = true)
   )
 
   // TOKENS
@@ -26,9 +26,9 @@ object FakeDB {
 
   // USERS
   val users = FakeTable(
-    1L -> User(1L, "user1@mail.com", "123456", "User 1", true, true),
-    2L -> User(2L, "user2@mail.com", "123456", "User 2", true, true),
-    3L -> User(3L, "user3@mail.com", "123456", "User 3", true, true)
+    1L -> TestUser(1L, "user1@mail.com", "123456", "User 1", true, true),
+    2L -> TestUser(2L, "user2@mail.com", "123456", "User 2", true, true),
+    3L -> TestUser(3L, "user3@mail.com", "123456", "User 3", true, true)
   )
 
   // FOLDERS

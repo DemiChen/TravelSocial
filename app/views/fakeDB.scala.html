@@ -84,7 +84,7 @@
 							@defining(folderList.map(f => FakeDB.tasks.count(_.folderId == f.id)).sum) { numTasksForUser =>
 								<tr>
 									<td rowspan="@numTasksForUser" class="text-center">@user.id</td>
-									<td rowspan="@numTasksForUser">@user.email</td>
+									<td rowspan="@numTasksForUser">@user.mobileNum</td>
 									<td rowspan="@numTasksForUser">@user.password</td>
 									<td rowspan="@numTasksForUser">@user.name</td>
 									<td rowspan="@numTasksForUser" class="text-center">@if(user.emailConfirmed){<span class="glyphicon glyphicon-ok-sign text-success"></span>}else{<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>}</td>
@@ -246,7 +246,7 @@
 					@FakeDB.users.values.sortBy(_.id).map { user =>
 						<tr>
 							<td class="text-center">@user.id</td>
-							<td>@user.email</td>
+							<td>@user.mobileNum</td>
 							<td>@user.password</td>
 							<td>@user.name</td>
 							<td class="text-center">@if(user.emailConfirmed){<span class="glyphicon glyphicon-ok-sign text-success"></span>}else{<span class="glyphicon glyphicon-exclamation-sign text-warning"></span>}</td>

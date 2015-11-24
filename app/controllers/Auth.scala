@@ -2,7 +2,7 @@ package controllers
 
 import api.ApiError._
 import api.JsonCombinators._
-import models.{ User, ApiToken }
+import models._
 import play.api.mvc._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
@@ -16,15 +16,12 @@ import play.api.i18n.{ MessagesApi }
 
 class Auth @Inject() (val messagesApi: MessagesApi) extends api.ApiController {
 
-  implicit val loginInfoReads: Reads[Tuple2[String, String]] = (
-    (__ \ "email").read[String](Reads.email) and
-      (__ \ "password").read[String] tupled
-  )
+  implicit val loginINfoFmt = Json.format[LoginInfo]
 
   def signIn = ApiActionWithBody { implicit request =>
-    readFromRequest[Tuple2[String, String]] {
-      case (email, pwd) =>
-        User.findByEmail(email).flatMap {
+    readFromRequest[LoginInfo] {
+      case LoginInfo(mobileNum, pwd) =>
+        TestUser.findByEmail(mobileNum).flatMap {
           case None => errorUserNotFound
           case Some(user) => {
             if (user.password != pwd) errorUserNotFound
@@ -47,30 +44,36 @@ class Auth @Inject() (val messagesApi: MessagesApi) extends api.ApiController {
     }
   }
 
-  implicit val signUpInfoReads: Reads[Tuple3[String, String, User]] = (
-    (__ \ "email").read[String](Reads.email) and
-      (__ \ "password").read[String](Reads.minLength[String](6)) and
-      (__ \ "user").read[User] tupled
-  )
+
+  implicit val singUpInfoFmt = Json.format[SignUpInfo]
 
   def signUp = ApiActionWithBody { implicit request =>
-    readFromRequest[Tuple3[String, String, User]] {
-      case (email, password, user) =>
-        User.findByEmail(email).flatMap {
-          case Some(anotherUser) => errorCustom("api.error.signup.email.exists")
-          case None => User.insert(email, password, user.name).flatMap {
-            case (id, user) =>
+    readFromRequest[SignUpInfo] {
+      case SignUpInfo(mobileNum, password, securityCode, area) =>
+        if (securityCodeIsValid(securityCode)) {
+          TestUser.findByEmail(mobileNum).flatMap {
+            case Some(anotherUser) => errorCustom("api.error.signup.email.exists")
+            case None => TestUser.insert(mobileNum, password, area + securityCode).flatMap {
+              case (id, user) =>
 
-              // Send confirmation email. You will have to catch the link and confirm the email and activate the user.
-              // But meanwhile...
-              Akka.system.scheduler.scheduleOnce(30 seconds) {
-                User.confirmEmail(id)
-              }
+                // Send confirmation email. You will have to catch the link and confirm the email and activate the user.
+                // But meanwhile...
+                Akka.system.scheduler.scheduleOnce(30 seconds) {
+                  TestUser.confirmEmail(id)
+                }
 
-              ok(user)
+                ok(user)
+            }
           }
-        }
+        } else errorCustom("security code is invalid")
     }
   }
+
+  /**
+   * TODO 短信验证码暂忽略
+   * @param sc
+   * @return
+   */
+  private def securityCodeIsValid(sc: Int) = true
 
 }

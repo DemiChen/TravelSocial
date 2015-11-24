@@ -14,15 +14,15 @@ object JsonCombinators {
   implicit val dateWrites = Writes.dateWrites("dd-MM-yyyy HH:mm:ss")
   implicit val dateReads = Reads.dateReads("dd-MM-yyyy HH:mm:ss")
 
-  implicit val userWrites = new Writes[User] {
-    def writes(u: User) = Json.obj(
+  implicit val userWrites = new Writes[TestUser] {
+    def writes(u: TestUser) = Json.obj(
       "id" -> u.id,
-      "email" -> u.email,
+      "email" -> u.mobileNum,
       "name" -> u.name
     )
   }
-  implicit val userReads: Reads[User] =
-    (__ \ "name").read[String](minLength[String](1)).map(name => User(0L, null, null, name, false, false))
+  implicit val userReads: Reads[TestUser] =
+    (__ \ "name").read[String](minLength[String](1)).map(name => TestUser(0L, null, null, name, false, false))
 
   implicit val folderWrites = new Writes[Folder] {
     def writes(f: Folder) = Json.obj(
