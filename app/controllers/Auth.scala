@@ -44,7 +44,6 @@ class Auth @Inject() (val messagesApi: MessagesApi) extends api.ApiController {
     }
   }
 
-
   implicit val singUpInfoFmt = Json.format[SignUpInfo]
 
   def signUp = ApiActionWithBody { implicit request =>

@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 case class User(
   mobileNum: String,
   password: String,
-  id: Option[String],
+  id: Long = 0L,
   userName: Option[String] = None,
   nickName: Option[String] = None,
   birthday: Option[DateTime] = None,
